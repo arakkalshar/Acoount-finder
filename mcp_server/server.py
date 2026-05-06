@@ -1,7 +1,3 @@
-"""
-ACC MCP Server — FastMCP over SSE
-"""
-
 import os
 import logging
 from fastmcp import FastMCP
@@ -13,41 +9,31 @@ log = logging.getLogger("acc-mcp")
 
 mcp = FastMCP("acc-mcp")
 
-
 @mcp.tool()
 def fetch_jobs_tool(role: str = "", location: str = "", keyword: str = "") -> list:
     """Return internship listings filtered by role, location, or keyword."""
     log.info(f"fetch_jobs role={role!r} location={location!r} keyword={keyword!r}")
     return fetch_jobs(role=role, location=location, keyword=keyword)
 
-
 @mcp.tool()
 def save_job_tool(job_id: str) -> dict:
     """Save a job to the internship pipeline by job ID."""
-    log.info(f"save_job job_id={job_id!r}")
+    log.info(f"save_job {job_id!r}")
     return save_job(job_id)
-
 
 @mcp.tool()
 def update_status_tool(job_id: str, status: str) -> dict:
     """Update the application status of a saved job."""
-    log.info(f"update_status job_id={job_id!r} status={status!r}")
+    log.info(f"update_status {job_id!r} {status!r}")
     return update_status(job_id, status)
-
 
 @mcp.tool()
 def list_pipeline_tool() -> list:
-    """List all jobs currently in the internship pipeline."""
+    """List all jobs in the internship pipeline."""
     log.info("list_pipeline called")
     return list_pipeline()
 
-
 if __name__ == "__main__":
     port = int(os.getenv("PORT", "8080"))
-    log.info(f"Starting ACC MCP server on port {port}")
-    mcp.run(
-        transport="sse",
-        host="0.0.0.0",
-        port=port,
-        allowed_hosts=["*"],
-    )
+    log.info(f"Starting on port {port}")
+    mcp.run(transport="sse", host="0.0.0.0", port=port)
