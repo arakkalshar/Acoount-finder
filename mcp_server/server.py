@@ -34,6 +34,5 @@ def list_pipeline_tool() -> list:
     return list_pipeline()
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", "8080"))
-    log.info(f"Starting on port {port}")
-    mcp.run(transport="sse", host="0.0.0.0", port=port)
+    log.info("Starting ACC MCP server")
+    mcp.run(transport="sse")
