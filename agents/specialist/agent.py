@@ -1,10 +1,14 @@
 import os
 from google.adk.agents import LlmAgent
-from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, SseServerParams
+from google.adk.tools.mcp_tool.mcp_toolset import MCPToolset, SseConnectionParams
 
 MCP_SERVER_URL = os.getenv(
     "MCP_SERVER_URL",
     "https://acc-mcp-664441136314.us-east1.run.app/sse"
+)
+
+mcp_toolset = MCPToolset(
+    connection_params=SseConnectionParams(url=MCP_SERVER_URL)
 )
 
 career_specialist = LlmAgent(
@@ -19,7 +23,5 @@ You are the Career Specialist with access to these tools:
 - list_pipeline_tool: show all saved jobs and statuses
 Always use tools. Never make up data. Show company, title, location, and job ID clearly.
 """,
-    toolsets=[
-        MCPToolset(connection_params=SseServerParams(url=MCP_SERVER_URL))
-    ],
+    tools=[mcp_toolset],
 )
